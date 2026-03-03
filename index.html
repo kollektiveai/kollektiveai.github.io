@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8"/>
+    <title>BIOCAD - Structure-Based Drug Design</title>
+    <meta content="BIOCAD применяет технологию structure-based drug design для разработки лекарственных препаратов" name="description"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://kollektiveai.github.io/css/style.css">
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+</head>
+<body>
+    <!-- Фиксированная верхняя панель -->
+    <header class="header">
+        <div class="header-left">
+            <div class="logo-container">
+                <div class="loading-indicator"></div>
+                <img src="https://npjnews.com/wp-content/uploads/2022/10/biokad.png" alt="BIOCAD Logo" class="logo">
+            </div>
+            <div class="header-title">Structure-Based Drug Design</div>
+        </div>
+        
+        <!-- Search Bar в центре с перенаправлением на RCSB.org -->
+        <div class="search-container">
+            <form id="search-form" class="search-wrapper" action="https://www.rcsb.org/search" method="GET" target="_blank">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" name="query" placeholder="RCSB PDB" required>
+            </form>
+        </div>
+        
+        <!-- Кнопки управления справа -->
+        <div class="header-controls">
+            <button class="control-button" id="help-button">
+                <i class="fas fa-question"></i>
+            </button>
+            <button class="control-button" id="settings-button">
+                <i class="fas fa-cog"></i>
+            </button>
+        </div>
+    </header>
+    
+    <!-- Кнопки боковых панелей -->
+    <button class="panel-toggle-btn left-panel-toggle" id="left-panel-toggle">
+        <i class="fas fa-chevron-right"></i>
+    </button>
+    
+    <button class="panel-toggle-btn right-panel-toggle" id="right-panel-toggle">
+        <i class="fas fa-chevron-left"></i>
+    </button>
+    
+    <!-- Левая боковая панель -->
+    <div class="side-panel left-panel" id="left-panel">
+        <div class="panel-content">
+        <center>
+        <img style="width:65%;" 
+             src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Imatinib.svg/960px-Imatinib.svg.png"/>
+        </center> 
+            <!-- Инвентарь атомов -->
+            <div class="inventory-container">
+                <!-- <h4 class="inventory-title">Инвентарь атомов</h4> -->
+                <div class="atom-grid" id="atom-grid">
+                    <!-- Атомы будут добавлены через JavaScript -->
+                </div>
+            <!--
+                <h3 class="editor-title">Редактор химических структур</h3>
+            -->
+                <center>
+                <div>
+                <img 
+                style="width:65%;" 
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Imatinib_structure.png/330px-Imatinib_structure.png"/>
+            </div>
+                </center>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Правая боковая панель -->
+    <div class="side-panel right-panel" id="right-panel">
+        <div class="panel-content">
+            <!-- GIT Styled Таймлайн -->
+            <div class="git-timeline-container">
+                <!--
+                <h4 class="git-timeline-title">История разработки</h4>
+                -->
+                <div class="git-timeline" id="git-timeline">
+                    <!-- GIT таймлайн элементы будут добавлены через JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Основной контент -->
+    <main class="main-content">
+        <!-- Model Viewer Container -->
+        <div class="model-viewer-container">
+            <model-viewer 
+                id="molecule-viewer"
+                src="https://tripreport.github.io/3D/1IEP_mol.glb"
+                alt="3D модель молекулы"
+                auto-rotate
+                camera-controls
+                touch-action="pan-y"
+                shadow-intensity="1"
+                exposure="1"
+                environment-image="neutral"
+                ar
+                ar-modes="webxr scene-viewer quick-look"
+                style="width: 100%; height: 100%;"
+            >
+                <div class="progress-bar hide" slot="progress-bar">
+                    <div class="update-bar"></div>
+                </div>
+            </model-viewer>
+            
+            <!-- Левые микропанели с информацией о молекуле -->
+            <div class="molecule-info-panels-left">
+                <div class="info-panel">
+                    <div class="info-panel-title">PDB ID</div>
+                    <div class="info-panel-value highlight">1IEP</div>
+                </div>
+                <div class="info-panel">
+                    <div class="info-panel-title">Класс фермента</div>
+                    <div class="info-panel-value">Трансфераза</div>
+                </div>
+                <div class="info-panel">
+                    <div class="info-panel-title">Молекула</div>
+                    <div class="info-panel-value">Тирозин-протеин киназа c-Abl</div>
+                </div>
+                <div class="info-panel">
+                    <div class="info-panel-title">Ингибитор</div>
+                    <div class="info-panel-value">Иматиниб (STI-571)</div>
+                </div>
+            </div>
+            
+            <!-- Правые микропанели с информацией о молекуле -->
+            <div class="molecule-info-panels-right">
+                <div class="info-panel">
+                    <div class="info-panel-title">Метод</div>
+                    <div class="info-panel-value">Рентгеновская дифракция</div>
+                </div>
+                <div class="info-panel">
+                    <div class="info-panel-title">Разрешение</div>
+                    <div class="info-panel-value">2.8 Å</div>
+                </div>
+                <div class="info-panel">
+                    <div class="info-panel-title">Функция</div>
+                    <div class="info-panel-value">Киназный домен + ингибитор</div>
+                </div>
+                <div class="info-panel">
+                    <div class="info-panel-title">Цель терапии</div>
+                    <div class="info-panel-value">Лечение рака</div>
+                </div>
+            </div>
+            
+            <!-- Дисплей энергии связывания -->
+            <div class="energy-display">
+                <i class="fas fa-bolt energy-icon"></i>
+                <span class="energy-value">-12.5 ккал/моль</span>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Поле ввода -->
+    <div class="input-container">
+        <div class="chat-input-wrapper">
+            <input type="text" class="chat-input" placeholder="ПРОМТ В МОЛЕКУЛУ">
+            <button class="generate-button" id="generate-button">
+                <i class="fas fa-dna"></i>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Модальное окно справки -->
+    <div class="modal-overlay" id="help-modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" id="help-modal-close">
+                <i class="fas fa-times"></i>
+            </button>
+            <p class="modal-text">
+                <b>«Играй, чтобы лечить»</b>
+                <hr>
+                <br>
+                <span>
+                    Для разработки лекарственных препаратов BIOCAD применяет технологию structure-based drug design, 
+                    которая использует методы компьютерного моделирования. 
+                    Это позволяет сделать поиск молекул направленным: с помощью математического моделирования отобранная молекула оптимизируется под конкретную мишень, 
+                    а затем воспроизводится в реальной лаборатории.
+                </span>
+                <br><br>
+                <hr>
+                <br>
+                <b>Данный проект демонстрирует, что :</b>
+                <br><br>
+                человек + ИИ эффективнее, чем просто ИИ.
+                <br>
+                Человек предоставляет «креативный прыжок» (нестандартную топологию), а система BIOCAD обеспечивает научную точность и воспроизводимость.
+            </p>
+        </div>
+    </div>
+    
+    <!-- Модальное окно настроек -->
+    <div class="modal-overlay" id="settings-modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" id="settings-modal-close">
+                <i class="fas fa-times"></i>
+            </button>
+            <h3 style="margin-bottom: 20px; color: #333;">Цветовая палитра BIOCAD</h3>
+            
+            <div class="code-block">
+                <span class="code-keyword">const</span> <span class="code-object">BIOCAD_THEME</span> <span class="code-bracket">=</span> <span class="code-bracket">{</span><br>
+                &nbsp;&nbsp;<span class="code-comment">// Тот самый зеленый для "OC"</span><br>
+                &nbsp;&nbsp;<span class="code-property">primaryGreen</span><span class="code-colon">:</span> <span class="code-string">'#78BE20'</span><span class="color-preview" style="background-color: #78BE20;"></span><span class="code-comma">,</span><br>
+                &nbsp;&nbsp;<span class="code-comment">// Для текста и основных букв лого</span><br>
+                &nbsp;&nbsp;<span class="code-property">darkGrey</span><span class="code-colon">:</span> <span class="code-string">'#333333'</span><span class="color-preview" style="background-color: #333333;"></span><span class="code-comma">,</span><br>
+                &nbsp;&nbsp;<span class="code-comment">// Для фоновых панелей интерфейса</span><br>
+                &nbsp;&nbsp;<span class="code-property">lightGrey</span><span class="code-colon">:</span> <span class="code-string">'#F5F5F5'</span><span class="color-preview" style="background-color: #F5F5F5;"></span><span class="code-comma">,</span><br>
+                &nbsp;&nbsp;<span class="code-comment">// Нейтральный цвет для белка</span><br>
+                &nbsp;&nbsp;<span class="code-property">proteinSurface</span><span class="code-colon">:</span> <span class="code-string">'#E0E0E0'</span><span class="color-preview" style="background-color: #E0E0E0;"></span><br>
+                <span class="code-bracket">}</span><span class="code-bracket">;</span>
+            </div>
+            
+            <div class="explanation-text">
+                <h3>Основная палитра отражает специфику биотехнологической отрасли:</h3>
+                
+                <p><strong>Белый</strong> — доминирующий цвет. Он олицетворяет стерильность лабораторных условий, абсолютную чистоту продукции и открытость научных данных. Также он подчеркивает современность и минимализм бренда.</p>
+                
+                <p><strong>Черный</strong> — символ уверенности, премиальности и высокого качества. Использование черного в типографике и логотипе акцентирует внимание на точности исследований и надежности компании как международного игрока.</p>
+                
+                <p><strong>Синий</strong> (насыщенные и глубокие оттенки) — традиционный цвет медицины и доверия. Он символизирует стабильность, инновационный подход в разработке сложных биопрепаратов и преемственность фармацевтических стандартов (включая международную маркировку инъекционных растворов).</p>
+                
+                <p><strong>Натуральные фактуры (дерево, металл)</strong> — в интерьерах исследовательских центров (таких как Uninova) они дополняют палитру, символизируя «человекоцентричность» технологий и экологическую ответственность (принципы устойчивого развития).</p>
+            </div>
+        </div>
+    </div>
+   <script src="https://kollektiveai.github.io/js/script.js"></script>
+</body>
+</html>
