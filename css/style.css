@@ -1,0 +1,1146 @@
+* {margin: 0;padding: 0;box-sizing: border-box;}::-webkit-scrollbar {width: 0;}
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1E1E1E;
+            background-color: #ffffff;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Фиксированная верхняя панель - прозрачная */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: rgb(191 221 255 / 10%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 100;
+            transition: all 0.3s ease;
+            height: 60px; /* Фиксированная высота верхней панели */
+        }
+        
+        .header:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+        
+        /* Индикатор загрузки (светодиод) */
+        .loading-indicator {
+            position: relative;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #78BE20 0%, #4CAF50 100%);
+            animation: pulse 2s infinite ease-in-out;
+            box-shadow: 0 0 10px rgba(120, 190, 32, 0.5);
+        }
+        
+        .loading-indicator::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(120, 190, 32, 0.7);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(120, 190, 32, 0);
+                transform: scale(1.05);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(120, 190, 32, 0);
+                transform: scale(1);
+            }
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo {
+            width: 120px;
+            height: auto;
+            display: block;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+        
+        .header-title {
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #1E1E1E;
+            text-shadow: 0 1px 2px rgba(255,255,255,0.5);
+        }
+        
+        /* Search Bar в центре */
+        .search-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            max-width: 500px;
+            margin: 0 20px;
+        }
+        
+        .search-wrapper {
+            display: flex;
+            align-items: center;
+            background: rgb(255 255 255 / 85%);
+            backdrop-filter: blur(5px);
+            border-radius: 25px;
+            padding: 5px 15px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .search-wrapper:hover,
+        .search-wrapper:focus-within {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .search-icon {
+            color: rgba(0, 0, 0, 0.5);
+            margin-right: 10px;
+            font-size: 16px;
+        }
+        
+        .search-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 8px 0;
+            font-size: 14px;
+            outline: none;
+            color: #333;
+        }
+        
+        .search-input::placeholder {
+            color: rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Кнопки в хедере справа */
+        .header-controls {
+            display: flex;
+            gap: 10px;
+            flex: 1;
+            justify-content: flex-end;
+        }
+        
+        .control-button {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(5px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .control-button:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: scale(1.05);
+        }
+        
+        .control-button i {
+            font-size: 18px;
+            color: #333;
+        }
+        
+        /* Боковые панели */
+        .side-panel {
+            position: fixed;
+            top: 60px; /* Начинается после верхней панели */
+            bottom: 0;
+            width: 380px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 90;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+        
+        .left-panel {
+            left: 0;
+            transform: translateX(-100%);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .right-panel {
+            right: 0;
+            transform: translateX(100%);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .side-panel.open {
+            transform: translateX(0);
+        }
+        
+        /* Кнопки боковых панелей - выступают на 8px */
+        .panel-toggle-btn {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background: #78BE20;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0 8px 8px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 91;
+            color: white;
+            font-size: 18px;
+            padding: 0;
+        }
+        
+        .left-panel-toggle {
+            left: -32px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .right-panel-toggle {
+            right: -32px;
+            border-radius: 8px 0 0 8px;
+        }
+        
+        .panel-toggle-btn:hover {
+            background: #6aad1c;
+            transform: translateY(-50%) scale(1.05);
+        }
+        
+        /* Когда панель открыта, кнопка двигается вместе с ней */
+        .left-panel.open ~ .left-panel-toggle {
+            left: 380px;
+        }
+        
+        .right-panel.open ~ .right-panel-toggle {
+            right: 380px;
+        }
+        
+        .panel-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Заголовок редактора */
+        .editor-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 20px 20px 0 20px;
+        }
+        
+        .editor-title::before {
+            content: "⚗️";
+            font-size: 14px;
+        }
+        
+        /* GIT STYLED ТАЙМЛАЙН - занимает всю высоту правой панели */
+        .git-timeline-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .git-timeline-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .git-timeline-title::before {
+            content: "⏱️";
+            font-size: 14px;
+        }
+        
+        .git-timeline {
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Вертикальная линия GIT таймлайна */
+        .git-timeline::before {
+            content: '';
+            position: absolute;
+            left: 16px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #78BE20, #4A90E2, #E24A4A);
+            z-index: 1;
+        }
+        
+        .git-timeline-item {
+            position: relative;
+            margin-bottom: 24px;
+            padding-left: 40px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .git-timeline-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* Круглая точка GIT таймлайна */
+        .git-timeline-marker {
+            position: absolute;
+            left: 8px;
+            top: 0;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 3px solid white;
+            z-index: 2;
+            box-shadow: 0 0 0 3px rgba(120, 190, 32, 0.2);
+        }
+        
+        .git-timeline-item.completed .git-timeline-marker {
+            background: #78BE20;
+            box-shadow: 0 0 0 3px rgba(120, 190, 32, 0.3);
+        }
+        
+        .git-timeline-item.active .git-timeline-marker {
+            background: #4A90E2;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3);
+        }
+        
+        .git-timeline-item.pending .git-timeline-marker {
+            background: #e2e8f0;
+        }
+        
+        /* Ветка от точки к контенту */
+        .git-timeline-branch {
+            position: absolute;
+            left: 26px;
+            top: 8px;
+            width: 12px;
+            height: 2px;
+            background: #ccc;
+        }
+        
+        .git-timeline-content {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            padding: 14px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .git-timeline-item.completed .git-timeline-content {
+            background: rgba(120, 190, 32, 0.05);
+            border-color: rgba(120, 190, 32, 0.2);
+        }
+        
+        .git-timeline-item.active .git-timeline-content {
+            background: rgba(74, 144, 226, 0.05);
+            border-color: rgba(74, 144, 226, 0.2);
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.1);
+        }
+        
+        .git-timeline-item:hover .git-timeline-content {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+        }
+        
+        .git-timeline-commit {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .git-commit-hash {
+            font-family: 'Fira Code', monospace;
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            color: #555;
+        }
+        
+        .git-timeline-message {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+        
+        .git-timeline-details {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        
+        .git-timeline-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #888;
+            margin-top: 8px;
+        }
+        
+        .git-author {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .git-author-avatar {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #78BE20, #4A90E2);
+        }
+        
+        /* Инвентарь атомов */
+        .inventory-container {
+            margin-top: 10px;
+            padding: 0 20px 20px 20px;
+        }
+        
+        .inventory-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .inventory-title::before {
+            content: "🧪";
+            font-size: 12px;
+        }
+        
+        .atom-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .atom-cell {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .atom-cell:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .atom-cell.donor {
+            background: linear-gradient(135deg, #4A90E2, #7B9EE5);
+        }
+        
+        .atom-cell.acceptor {
+            background: linear-gradient(135deg, #E24A4A, #E57B7B);
+        }
+        
+        .atom-cell.neutral {
+            background: linear-gradient(135deg, #78BE20, #94D04A);
+        }
+        
+        .atom-cell.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            filter: grayscale(0.8);
+        }
+        
+        .atom-cell.disabled:hover {
+            transform: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .charge-indicator {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            font-size: 10px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.9);
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .element-symbol {
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        
+        .hybridization {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 8px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+        
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 8px 8px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            transition: width 0.3s ease;
+        }
+        
+        /* Основной контент - на весь экран */
+        .main-content {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+        
+        /* Model Viewer Container */
+        .model-viewer-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        /* Микропанели с информацией о молекуле */
+        .molecule-info-panels-left {
+            position: absolute;
+            top: 150px;
+            left: 20px;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+        }
+        
+        .molecule-info-panels-right {
+            position: absolute;
+            top: 150px;
+            right: 20px;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+        }
+        
+        .info-panel {
+            background: rgb(191 221 255 / 10%);
+            backdrop-filter: blur(10px);
+         /* background: rgba(255, 255, 255, 0.15); */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 25px 16px;
+            min-width: 200px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .info-panel:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        
+        .info-panel-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .info-panel-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+        }
+        
+        .info-panel-value.highlight {
+            color: #78BE20;
+        }
+        
+        /* Дисплей энергии связывания */
+        .energy-display {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            /*background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);*/
+            background: rgb(191 221 255 / 6%);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            z-index: 50;
+         /* box-shadow: 0 4px 20px rgba(0,0,0,0.1); */
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .energy-value {
+            color: #78BE20;
+            font-weight: 700;
+        }
+        
+        .energy-icon {
+            color: #78BE20;
+            font-size: 18px;
+        }
+        
+        /* Модальные окна */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+            background: #f8fafc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        .modal-close:hover {
+            background: #e8eef4;
+            transform: scale(1.05);
+        }
+        
+        .modal-close i {
+            font-size: 20px;
+            color: #333;
+        }
+        
+        .modal-text {
+            font-size: 18px;
+            line-height: 1.6;
+            letter-spacing: -0.01em;
+            margin-bottom: 25px;
+        }
+        
+        /* Стили для кода */
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 16px;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+        
+        .code-keyword {
+            color: #ff3366;
+        }
+        
+        .code-object {
+            color: #ffcc66;
+        }
+        
+        .code-comment {
+            color: #666666;
+            font-style: italic;
+        }
+        
+        .code-property {
+            color: #d4fb79;
+        }
+        
+        .code-string {
+            color: yellow;
+        }
+        
+        .color-preview {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            margin-right: 10px;
+            vertical-align: middle;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Поле ввода */
+        .input-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 500px;
+            max-width: 90%;
+            z-index: 100;
+        }
+        
+        .chat-input-wrapper {
+            display: flex;
+            align-items: center;
+            background:rgb(191 221 255 / 30%);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 30px;
+            padding: 5px 5px 5px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .chat-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 15px 10px;
+            font-size: 16px;
+            outline: none;
+            color: #333;
+        }
+        
+        .chat-input::placeholder {
+            color: #999;
+        }
+        
+        .generate-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #333;
+            font-size: 20px;
+        }
+        
+        .generate-button:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: scale(1.05);
+        }
+        
+        /* Стили для model-viewer */
+        model-viewer {
+            width: 100%;
+            height: 100%;
+            --progress-bar-color: #78BE20;
+            --progress-bar-height: 3px;
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 991px) {
+            .input-container {
+                width: 400px;
+            }
+            
+            .side-panel {
+                width: 340px;
+            }
+            
+            .search-container {
+                max-width: 300px;
+            }
+            
+            .left-panel.open ~ .left-panel-toggle {
+                left: 340px;
+            }
+            
+            .right-panel.open ~ .right-panel-toggle {
+                right: 340px;
+            }
+            
+            .atom-grid {
+                gap: 10px;
+            }
+            
+            .energy-display {
+                top: 70px;
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+            
+            .molecule-info-panels-left {
+                top: 70px;
+                left: 15px;
+            }
+            
+            .molecule-info-panels-right {
+                top: 70px;
+                right: 15px;
+            }
+            
+            .info-panel {
+                min-width: 180px;
+                padding: 10px 14px;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .header {
+                padding: 8px 15px;
+                flex-wrap: wrap;
+                gap: 10px;
+                height: 55px;
+            }
+            
+            .header-left {
+                order: 1;
+                flex: 0 0 auto;
+            }
+            
+            .search-container {
+                order: 3;
+                flex: 0 0 100%;
+                max-width: 100%;
+                margin: 10px 0 0 0;
+            }
+            
+            .header-controls {
+                order: 2;
+                flex: 0 0 auto;
+            }
+            
+            .logo {
+                width: 100px;
+            }
+            
+            .header-title {
+                font-size: 9px;
+            }
+            
+            .control-button {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .control-button i {
+                font-size: 16px;
+            }
+            
+            .input-container {
+                width: 90%;
+                bottom: 15px;
+            }
+            
+            .chat-input-wrapper {
+                padding: 3px 3px 3px 15px;
+            }
+            
+            .chat-input {
+                padding: 12px 8px;
+                font-size: 14px;
+            }
+            
+            .generate-button {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+            
+            .side-panel {
+                width: 300px;
+                top: 55px; /* Адаптивная высота верхней панели */
+            }
+            
+            .panel-toggle-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+            }
+            
+            .left-panel-toggle {
+                left: -27px;
+            }
+            
+            .right-panel-toggle {
+                right: -27px;
+            }
+            
+            .left-panel.open ~ .left-panel-toggle {
+                left: 300px;
+            }
+            
+            .right-panel.open ~ .right-panel-toggle {
+                right: 300px;
+            }
+            
+            .atom-grid {
+                gap: 8px;
+            }
+            
+            .element-symbol {
+                font-size: 18px;
+            }
+            
+            .energy-display {
+                top: 65px;
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+            
+            .molecule-info-panels-left {
+                top: 65px;
+                left: 10px;
+                gap: 8px;
+            }
+            
+            .molecule-info-panels-right {
+                top: 65px;
+                right: 10px;
+                gap: 8px;
+            }
+            
+            .info-panel {
+                min-width: 160px;
+                padding: 8px 12px;
+            }
+            
+            .info-panel-title {
+                font-size: 11px;
+            }
+            
+            .info-panel-value {
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header {
+                height: 50px;
+            }
+            
+            .header-left {
+                gap: 10px;
+            }
+            
+            .logo {
+                width: 80px;
+            }
+            
+            .header-controls {
+                gap: 5px;
+            }
+            
+            .control-button {
+                width: 30px;
+                height: 30px;
+            }
+            
+            .control-button i {
+                font-size: 14px;
+            }
+            
+            .side-panel {
+                width: 280px;
+                top: 50px;
+            }
+            
+            .left-panel-toggle {
+                left: -22px;
+            }
+            
+            .right-panel-toggle {
+                right: -22px;
+            }
+            
+            .left-panel.open ~ .left-panel-toggle {
+                left: 280px;
+            }
+            
+            .right-panel.open ~ .right-panel-toggle {
+                right: 280px;
+            }
+            
+            .atom-grid {
+                grid-template-columns: repeat(4, 1fr);
+                grid-template-rows: repeat(5, 1fr);
+                gap: 6px;
+            }
+            
+            .panel-content {
+                padding: 15px;
+            }
+            
+            .git-timeline-container {
+                padding: 15px;
+            }
+            
+            .energy-display {
+                top: 60px;
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+            
+            .molecule-info-panels-left {
+                top: 60px;
+                left: 8px;
+                gap: 6px;
+            }
+            
+            .molecule-info-panels-right {
+                top: 60px;
+                right: 8px;
+                gap: 6px;
+            }
+            
+            .info-panel {
+                min-width: 140px;
+                padding: 6px 10px;
+            }
+            
+            .info-panel-title {
+                font-size: 10px;
+            }
+            
+            .info-panel-value {
+                font-size: 13px;
+            }
+        }
